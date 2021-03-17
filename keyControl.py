@@ -6,6 +6,8 @@ import pyautogui
 import keyboard
 from win10toast import ToastNotifier
 import threading
+from pynput.keyboard import Listener
+from pynput import keyboard
 
 #GUI Class to run UI as separate thread
 class GUI_thread(threading.Thread):
@@ -22,6 +24,7 @@ class GUI_thread(threading.Thread):
         self.root.protocol("WM_DELETE_WINDOW", self.callback)
 
         #GUI Styling
+        my_img = ImageTK.PhotoImage(Image.open("Capture.JPG"))
         label = tk.Label(self.root, text="Hello World")
         label.pack()
 
@@ -41,84 +44,124 @@ pyautogui.FAILSAFE = False
 #mouse controller
 mouse = Controller()
 
-activated = True
+#keep track of activated/deactivated states
+counter=0
 
-#independent event loop
-while True:
+#method with all key functions
+def keyControls(key):
 
-    #key to exit program
-    if(keyboard.is_pressed('j')):
-        break
-
-    #activated
-    while activated == True:
-
-        #starting positions
-        if(keyboard.is_pressed('q')):
-            pyautogui.moveTo(30,10)
-
-        elif(keyboard.is_pressed('p')):
-            pyautogui.moveTo(1900,10)
-
-        elif(keyboard.is_pressed('z')):
-            pyautogui.moveTo(30,1050)
-
-        elif(keyboard.is_pressed('m')):
-            pyautogui.moveTo(1900,1050)
-
-        elif(keyboard.is_pressed('h')):
-            pyautogui.moveTo(965,525)
-
-        #grid movements
-        elif(keyboard.is_pressed('d')):
-            pyautogui.moveRel(100,0)
-
-        elif(keyboard.is_pressed('s')):
-            pyautogui.moveRel(0,130)
-
-        elif(keyboard.is_pressed('w')):
-            pyautogui.moveRel(0,-130)
-
-        elif(keyboard.is_pressed('a')):
-            pyautogui.moveRel(-100,0)
-
-        #clicking
-        elif(keyboard.is_pressed('g')):
-            mouse.click(Button.left,1)
-
-        elif(keyboard.is_pressed('f')):
-            mouse.click(Button.left,2)
-
-        #normal mouse movements
+    global counter
+    letter = str(key)
+    print(letter)
+    print(counter)
 
 
-        #scrolling
-        elif(keyboard.is_pressed('k')):
-            pyautogui.scroll(10)
+    #starting positions
+    if letter == "'q'" and counter==0 :
+        pyautogui.moveTo(30,10)
 
-        elif(keyboard.is_pressed('l')):
-             pyautogui.scroll(-10)
+    elif letter == "'p'" and counter==0:
+        pyautogui.moveTo(1900,10)
 
-        #grab and release files, folders etc.
-        elif(keyboard.is_pressed('?')):
-            pyautogui.mouseDown(button='left')
+    elif letter == "'z'" and counter==0:
+        pyautogui.moveTo(30,1050)
 
-        elif(keyboard.is_pressed('>')):
-            pyautogui.mouseUp(button='left')
+    elif letter == "'m'" and counter==0:
+        pyautogui.moveTo(1900,1050)
 
-        #deactivate
-        elif(keyboard.is_pressed('x')):
-            activated = False
-            print("deactivated")
+    elif letter == "'h'" and counter==0:
+        pyautogui.moveTo(965,525)
 
 
-    #deactivated
-    while activated == False:
+    #grid movements
+    elif letter == "'d'" and counter==0:
+        pyautogui.moveRel(100,0)
 
-        #notify user that program is deactivated
-        #toaster.show_toast("KeyControl Deactivated")
+    elif letter == "'s'" and counter==0:
+        pyautogui.moveRel(0,130)
 
-        #activate keyboard navigation
-        if(keyboard.is_pressed('n')):
-            activated = True
-            print("activated")
+    elif letter == "'w'" and counter==0:
+        pyautogui.moveRel(0,-130)
+
+    elif letter == "'a'" and counter==0:
+        pyautogui.moveRel(-100,0)
+
+
+    #left click, left double click, right click
+    elif letter == "'<'" and counter==0:
+        mouse.click(Button.left,1)
+
+    elif letter == "Key.space" and counter==0:
+        mouse.click(Button.left,2)
+
+    elif letter == "'>'" and counter==0:
+        mouse.click(Button.left,2)
+
+    #normal mouse movements
+
+    #up
+    elif letter == '<104>' and counter==0:
+        pyautogui.moveRel(0,-10)
+
+    #down
+    elif letter == '<98>' and counter==0:
+        pyautogui.moveRel(0,10)
+
+    #right
+    elif letter == '<102>' and counter==0:
+        pyautogui.moveRel(10,0)
+
+    #left
+    elif letter == '<100>' and counter==0:
+        pyautogui.moveRel(-10,0)
+
+    #left up diagonal
+    elif letter == '<103>' and counter==0:
+        pyautogui.moveRel(-10,-10)
+
+    #up right diagonal
+    elif letter == "<105>" and counter==0:
+        pyautogui.moveRel(10,-10)
+
+    #down left diagonal
+    elif letter == "<97>" and counter==0:
+        pyautogui.moveRel(-10,10)
+
+    #down right diagonal
+    elif letter == "<99>" and counter==0:
+        pyautogui.moveRel(10,10)
+
+    #scrolling up and down
+    elif letter == "<101>" and counter==0:
+        pyautogui.scroll(10)
+
+    elif letter == "<96>" and counter==0:
+         pyautogui.scroll(-10)
+
+
+    #grab and release files, folders etc.
+    elif letter == "'g'" and counter==0:
+        pyautogui.mouseDown(button='left')
+
+    elif letter == "'r'" and counter==0:
+        pyautogui.mouseUp(button='left')
+
+
+    #deactivate
+    elif letter == "'D'" and counter==0:
+        counter=1
+        toaster.show_toast("KeyControl Deactivated")
+
+    #end program
+    elif letter == "Key.esc":
+        return False
+
+    #reactivate
+    elif letter == "'A'" and counter==1:
+        counter=0
+        toaster.show_toast("KeyControl Activated")
+
+
+#Collecting events until stopped, non-blocking version
+listener = keyboard.Listener(on_press=keyControls)
+listener.start()
