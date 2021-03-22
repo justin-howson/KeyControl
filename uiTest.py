@@ -22,5 +22,12 @@ canvas.create_text(80,155, text = "Press 'D' to move cursor right")
 canvas.create_text(55,180, text = "Press '<' to left click" )
 canvas.create_text(95,195, text = "Press 'spacebar' to double left click" )
 canvas.create_text(60,210, text = "Press '>' to right click" )
+#Drag and drop
+canvas.create_text(62,235, text = "Press 'G' to grab/drag" )
+canvas.create_text(68,250, text = "Press 'R' to drop/release")
+#Activation/deactivation
+canvas.create_text(107,275, text = "Press 'Shift D' to deactivate KeyControl" )
+canvas.create_text(105,290, text = "Press 'Shift A' to reactivate KeyControl" )
+canvas.create_text(85,305, text = "Press 'Esc' to close KeyControl" )
 #save styling
 canvas.pack()
