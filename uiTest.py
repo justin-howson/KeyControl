@@ -18,6 +18,9 @@ canvas.create_text(76,110, text = "Press 'W' to move cursor up" )
 canvas.create_text(76,125, text = "Press 'A' to move cursor left")
 canvas.create_text(82,140, text = "Press 'S' to move cursor down" )
 canvas.create_text(80,155, text = "Press 'D' to move cursor right")
-
+#Mouse click 
+canvas.create_text(55,180, text = "Press '<' to left click" )
+canvas.create_text(95,195, text = "Press 'spacebar' to double left click" )
+canvas.create_text(60,210, text = "Press '>' to right click" )
 #save styling
 canvas.pack()
