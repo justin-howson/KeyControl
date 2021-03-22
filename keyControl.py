@@ -95,7 +95,7 @@ def keyControls(key):
         mouse.click(Button.left,2)
 
     elif letter == "'>'" and counter==0:
-        mouse.click(Button.left,2)
+        mouse.click(Button.right,1)
 
     #normal mouse movements
 
